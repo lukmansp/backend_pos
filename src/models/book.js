@@ -43,10 +43,10 @@ module.exports = {
             })
         })
     },
-    
+
     getPage: (name, page, limit, sortBy) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM product WHERE name LIKE "%' + name + '%" ORDER BY ' + sortBy + ' ASC LIMIT ' + page + ',' + limit, (error, result) => {
+            connection.query('SELECT * FROM product WHERE name LIKE "%' + name + '%" ORDER BY ' + sortBy + ' ASC LIMIT ' + page + ',' + limit, (error, result) => {
                 if (!error) {
                     resolve(result)
                 } else {

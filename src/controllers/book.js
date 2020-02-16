@@ -1,4 +1,5 @@
 const bookModel = require('../models/book')
+const connection = require('../configs/mysql')
 module.exports = {
     getAll: async (request, response) => {
         try {
@@ -74,10 +75,10 @@ module.exports = {
         var { name, page, limit, sortBy } = request.query
         name = typeof name !== 'undefined' ? name : ""
         page = typeof page !== 'undefined' ? page : 0
-        limit = typeof limit !== 'undefined' ? limit : 6
+        limit = typeof limit !== 'undefined' ? limit : 3    
         sortBy = typeof sortBy !== 'undefined' ? sortBy : 'id'
 
-        db.query("SELECT * FROM product", (error, result) => {
+        connection.query("SELECT * FROM product", (error, result) => {
             if (!error) {
                 let pages = result.length
                 console.log(pages)
@@ -89,7 +90,7 @@ module.exports = {
                     pages = (pages % limit) + 1
                 }
 
-                productModel.getPage(name, page, limit, sortBy)
+                bookModel.getPage(name, page, limit, sortBy)
                     .then(resultQuery => {
                         response.json({
                             status: 200,
