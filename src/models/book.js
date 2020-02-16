@@ -9,9 +9,11 @@ module.exports = {
             })
         })
     },
-    getOrder: (order) => {
+    getOrder: (data) => {
+        const sortBy = data.sortBy
+        const orderBy = data.orderBy
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM product ORDER BY updated_at ASC', (error, result) => {
+            connection.query('SELECT * FROM product ORDER BY ' + sortBy + ' ' + orderBy, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })
@@ -38,6 +40,18 @@ module.exports = {
             connection.query('DELETE FROM book WHERE id = ?', bookId, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
+            })
+        })
+    },
+    
+    getPage: (name, page, limit, sortBy) => {
+        return new Promise((resolve, reject) => {
+            conn.query('SELECT * FROM product WHERE name LIKE "%' + name + '%" ORDER BY ' + sortBy + ' ASC LIMIT ' + page + ',' + limit, (error, result) => {
+                if (!error) {
+                    resolve(result)
+                } else {
+                    reject(error)
+                }
             })
         })
     }

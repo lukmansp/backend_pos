@@ -12,13 +12,16 @@ module.exports = {
 
     getOrder: async (request, response) => {
         try {
-            const order = request.params
-            const result = await bookModel.getOrder(order)
+            const sortBy = request.query.sortBy
+            const orderBy = request.query.orderBy
+            const data = { sortBy, orderBy }
+            const result = await bookModel.getOrder(data)
             response.json(result)
         } catch (error) {
             console.log(error)
         }
     },
+
     insertData: async (request, response) => {
         try {
             const data = {
@@ -37,6 +40,7 @@ module.exports = {
             console.log(error)
         }
     },
+
     updateData: async (request, response) => {
         try {
             const bookId = request.params.bookId
@@ -55,6 +59,7 @@ module.exports = {
             console.log(error)
         }
     },
+
     deleteData: async (request, response) => {
         try {
             const bookId = request.params.bookId
@@ -63,6 +68,49 @@ module.exports = {
         } catch (error) {
             console.log(error)
         }
+    },
+
+    getPage: (request, response) => {
+        var { name, page, limit, sortBy } = request.query
+        name = typeof name !== 'undefined' ? name : ""
+        page = typeof page !== 'undefined' ? page : 0
+        limit = typeof limit !== 'undefined' ? limit : 6
+        sortBy = typeof sortBy !== 'undefined' ? sortBy : 'id'
+
+        db.query("SELECT * FROM product", (error, result) => {
+            if (!error) {
+                let pages = result.length
+                console.log(pages)
+                if (limit >= pages) {
+                    pages = 1;
+                } else if (pages % limit == 0) {
+                    pages = pages / limit
+                } else {
+                    pages = (pages % limit) + 1
+                }
+
+                productModel.getPage(name, page, limit, sortBy)
+                    .then(resultQuery => {
+                        response.json({
+                            status: 200,
+                            amount: resultQuery.length,
+                            page: pages,
+                            message: 'success getting data',
+                            data: resultQuery
+                        })
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        response.status(400).json({
+                            status: 400,
+                            message: 'error getting data'
+                        })
+                    })
+            } else {
+                console.log("Data not isset")
+            }
+        })
+
     }
 
 }
