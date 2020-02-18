@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const multer = require('multer')
 
 module.exports = {
   generateSalt: (length) => {
@@ -29,5 +30,18 @@ module.exports = {
     result.message = message
 
     return response.status(result.status).json(result)
+  },
+  uploadImage:()=>{
+    const storage = multer.diskStorage({
+      destination: (request, file, cb) => {
+          cb(null, './uploads');
+      },
+      filename: (request, file, cb) => {
+          cb(null, file.originalname)
+      }
+      
+  })
+  return multer({storage})
   }
+
 }
