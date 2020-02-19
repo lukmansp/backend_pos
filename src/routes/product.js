@@ -1,28 +1,15 @@
 const express = require('express')
 const Route = express.Router()
-const multer = require('multer')
-// const storage = multer.diskStorage({
-//     destination: (request, file, cb) => {
-//         cb(null, './uploads');
-//     },
-//     filename: (request, file, cb) => {
-//         cb(null, file.originalname)
-//     }
-// })
 
+const { authentication, authorization } = require('../helpers/auth')
 const productController = require('../controllers/product')
-const {uploadImage} =require('../helpers/index')
-
-const upload = multer({uploadImage })
+const { productUpload } = require('../helpers/index')
 
 Route
     .get('/', productController.getAll)
-     .get('/:productId', productController.getId)
-    //.get('/orderName', productController.getOrder)
-    //.get('/page', productController.getPage)
-    .post('/', upload.single('image'), productController.insertData)
-    .patch('/:bookId', upload.single('image'), productController.updateData)
-    // .patch('/:bookId', upload.single('image'), productController.updateData)
+    .get('/:productId', authentication, authorization, productController.getId)
+    .post('/', productUpload, productController.insertData)
+    .patch('/:bookId', productUpload, productController.updateData)
     .delete('/:bookId', productController.deleteData)
 
 module.exports = Route
