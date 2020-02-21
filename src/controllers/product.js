@@ -16,7 +16,7 @@ module.exports = {
             const startIndex = limit * (offset - 1);
             // const result = await productModel.getAll(name, sortBy, orderBy, limit, startIndex)
             // miscHelper.response(response, 200, result)
-            const key = `get-all-product-${name}-${sortBy}-${orderBy}-${limit}-${offset}`
+            const key = `get-all-product`
             const resultCache = await redisCache.get(key)
 
             if (resultCache) miscHelper.response(response, 200, resultCache)
@@ -45,6 +45,7 @@ module.exports = {
 
     insertData: async (request, response) => {
         try {
+            const key = 'get-all-product'
             const data = {
                 name: request.body.name,
                 description: request.body.description,
@@ -55,6 +56,7 @@ module.exports = {
                 created_at: new Date(),
                 updated_at: new Date()
             }
+            await redisCache.del(key)
             const result = await productModel.insertData(data)
             miscHelper.response(response, 200, result)
         } catch (error) {

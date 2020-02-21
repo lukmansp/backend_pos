@@ -3,7 +3,7 @@ const Route = express.Router()
 
 const { authentication, authorization } = require('../helpers/auth')
 const productController = require('../controllers/product')
-const { productUpload } = require('../helpers/index')
+const { productUpload } = require('../helpers/upload')
 
 Route
     .get('/', productController.getAll)
