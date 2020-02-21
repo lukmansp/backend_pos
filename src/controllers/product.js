@@ -20,7 +20,7 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
-    
+
     getId: async (request, response) => {
         try {
             const productId = request.params.productId
@@ -31,16 +31,16 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
-    
+
     insertData: async (request, response) => {
         try {
             const data = {
                 name: request.body.name,
                 description: request.body.description,
                 image: `http://localhost:9009/uploads/${request.file.filename}`,
-                category_id: request.body.category_id,
                 price: request.body.price,
                 stock: request.body.stock,
+                category_id: request.body.category_id,
                 created_at: new Date(),
                 updated_at: new Date()
             }
@@ -51,7 +51,7 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
-    
+
     updateData: async (request, response) => {
         try {
             const bookId = request.params.bookId
@@ -80,7 +80,7 @@ module.exports = {
     deleteData: async (request, response) => {
         try {
             const bookId = request.params.bookId
-            const result = await bookModel.deleteData(bookId)
+            const result = await productModel.deleteData(bookId)
             miscHelper.response(response, 200, result)
         } catch (error) {
             console.log(error)

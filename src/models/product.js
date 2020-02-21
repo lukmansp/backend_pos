@@ -20,7 +20,7 @@ module.exports = {
         })
     },
 
-    
+
     insertData: (data) => {
         return new Promise((resolve, reject) => {
             connection.query('INSERT INTO product SET ?', data, (error, result) => {
@@ -29,7 +29,7 @@ module.exports = {
             })
         })
     },
-    
+
     updateData: (data, bookId) => {
         return new Promise((resolve, reject) => {
             connection.query('UPDATE product SET ? WHERE id = ?', [data, bookId], (error, result) => {
