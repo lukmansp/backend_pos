@@ -25,5 +25,5 @@ const upload = multer({
 })
 const uploads = upload.single('image')
 module.exports = {
-    productUpload: uploads
+  productUpload: uploads
 }

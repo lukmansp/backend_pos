@@ -44,10 +44,15 @@ module.exports = {
   },
 
   response: (response, status, data, pagination) => {
+    const page=[]
     const result = {}
+    for (var i = 1; i <= pagination.paginate; i++) {
+            page[i-1] = i
+        }
 
     result.status = status || 200
     result.result = data
+    result.paginate=page
 
     return response.status(result.status).json(result)
   },

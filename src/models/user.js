@@ -16,5 +16,30 @@ module.exports = {
                 resolve(result)
             })
         })
+    },
+    getUser: (name) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT * FROM user WHERE name LIKE '%${name}%'`, (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
+            })
+        })
+    },
+    updateData: (data, userId) => {
+        return new Promise((resolve, reject) => {
+            connection.query('UPDATE user SET ? WHERE id = ?', [data, userId], (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
+            })
+        })
+    },
+    deleteData: (userId) => {
+        return new Promise((resolve, reject) => {
+            connection.query('DELETE FROM user WHERE id = ?', userId, (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
+            })
+        })
     }
+
 }

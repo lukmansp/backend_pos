@@ -2,9 +2,16 @@ require('dotenv').config()
 const connection = require('../configs/mysql')
 const SQL = require('sql-template-strings');
 module.exports = {
-    getAll: (name, sortBy, orderBy, limit, startIndex) => {
+    countData:()=>{
+        return new Promise((resolve, reject)=>{
+            connection.query('SELECT count(*) as totalData FROM product', (error, result)=>{
+                resolve(result[0].totalData)
+            })
+        })
+    },
+    getAll: (name, category , sortBy, orderBy, limit, startIndex) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT product.id, product.name, product.description, product.image, category.category_name ,product.price, product.stock, product.created_at, product.updated_at FROM product LEFT JOIN category ON product.category_id = category.id WHERE product.name LIKE '%${name}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
+            connection.query(`SELECT product.id, product.name, product.category_id,product.description, product.image, category.category_name ,product.price, product.stock, product.created_at, product.updated_at FROM product LEFT JOIN category ON product.category_id = category.id WHERE product.name LIKE '%${name}%' AND category.category_name LIKE '%${category}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })
@@ -14,6 +21,14 @@ module.exports = {
     getId: (productId) => {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM product WHERE id = ?', productId, (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
+            })
+        })
+    },
+     catId: (categoryId) => {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM product WHERE category_id = ?', categoryId, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })

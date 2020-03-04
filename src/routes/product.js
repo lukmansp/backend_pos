@@ -7,7 +7,7 @@ const { productUpload } = require('../helpers/upload')
 
 Route
     .get('/', productController.getAll)
-    .get('/:productId', authentication, authorization, productController.getId)
+    .get('/:productId', productController.getId)
     .post('/', productUpload, productController.insertData)
     .patch('/:bookId', productUpload, productController.updateData)
     .delete('/:bookId', productController.deleteData)

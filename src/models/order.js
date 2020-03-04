@@ -11,7 +11,7 @@ module.exports = {
 
     getAll: (name, sortBy, orderBy, limit, startIndex) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT product.id, product.name, product.description, product.image, category.category_name ,product.price, product.stock, product.created_at, product.updated_at FROM product LEFT JOIN category ON product.category_id = category.id WHERE product.name LIKE '%${name}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
+            connection.query(`SELECT product.id,product.name, product.stock ,order_product.user, order_product.quantity, order_product.price, order_product.total , order_product.updated_at FROM product LEFT JOIN order_product ON product.id = order_product.id_product WHERE product.name LIKE '%${name}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })
@@ -30,13 +30,13 @@ module.exports = {
     insertOrder: (dataOrder) => {
         return new Promise((resolve, reject) => {
             connection.query(sqlSearchProduct, dataOrder.id_product, (error, result) => {
-                if (result.length > 0 && result[0].stock > dataOrder.stock) {
-                    connection.query(sqlUpdateProduct, [result[0].stock - dataOrder.stock, result[0].id])
+                if (result.length > 0 && result[0].stock > dataOrder.quantity) {
+                    connection.query(sqlUpdateProduct, [result[0].stock - dataOrder.quantity, result[0].id])
                     connection.query(sqlInsertOrder, dataOrder, (error, result) => {
                         if (error) reject(new Error(error))
                         resolve(result)
                     })
-                }else{
+                } else {
                     reject(new Error('Stock not amount'))
                 }
             })

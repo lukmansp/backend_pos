@@ -33,14 +33,14 @@ module.exports = {
 
     insertOrder: async (request, response) => {
         try {
-            const stock = request.body.stock
+            const quantity = request.body.quantity
             const price = request.body.price
-            const pay = stock * price
+            const pay = quantity * price
             const { id_product } = request.body
             const dataOrder = {
                 id_product,
-                id_category: request.body.id_category,
-                stock: request.body.stock,
+                user: request.body.user,
+                quantity: request.body.quantity,
                 price: request.body.price,
                 total: pay,
                 created_at: new Date(),
