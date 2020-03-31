@@ -1,7 +1,7 @@
-const productModel = require('../models/order')
+const orderModel = require('../models/order')
 const connection = require('../configs/mysql')
 const miscHelper = require('../helpers')
-
+const { v4: uuidv4 } = require('uuid');
 module.exports = {
     getAll: async (request, response) => {
         try {
@@ -32,25 +32,52 @@ module.exports = {
     },
 
     insertOrder: async (request, response) => {
-        try {
-            const quantity = request.body.quantity
-            const price = request.body.price
-            const pay = quantity * price
-            const { id_product } = request.body
-            const dataOrder = {
-                id_product,
-                user: request.body.user,
-                quantity: request.body.quantity,
-                price: request.body.price,
-                total: pay,
-                created_at: new Date(),
-                updated_at: new Date()
+        // try {
+        //     const quantity = request.body.quantity
+        //     const price = request.body.price
+        //     const pay = quantity * price
+        //     const { id_product } = request.body
+        //     const dataOrder = {
+        //         id_product,
+        //         user: request.body.user,
+        //         quantity: request.body.quantity,
+        //         price: request.body.price,
+        //         total: pay,
+        //         created_at: new Date(),
+        //         updated_at: new Date()
+        //     }
+        //     const result = await productModel.insertOrder(dataOrder)
+        //     miscHelper.response(response, 200, result)
+        // } catch (error) {
+        //     console.log(error)
+        //     miscHelper.customErrorResponse(response, 404, 'Order failed')
+        // }
+      try{
+        const payload =request.body
+            const id_order=uuidv4()
+            const dataOrder={
+                id_order,
+                id_user:payload.id_user,
+                total:payload.total,
+                created_at:new Date(),
+                updated_at:new Date()
             }
-            const result = await productModel.insertOrder(dataOrder)
-            miscHelper.response(response, 200, result)
-        } catch (error) {
-            console.log(error)
-            miscHelper.customErrorResponse(response, 404, 'Order failed')
-        }
+console.log(dataOrder)
+            const result = await orderModel.insertOrder(dataOrder)
+            payload.product.map(async item =>{
+                const orderDetail={
+                    id_order,
+                    id_product:item.id_product,
+                    quantity:item.quantity
+                }
+                await orderModel.insertDetail(orderDetail)
+
+            })
+            
+
+            miscHelper.response(response,200,result)
+}catch(error){
+    miscHelper.customErrorResponse(response,500,'internal server')
     }
+}
 }

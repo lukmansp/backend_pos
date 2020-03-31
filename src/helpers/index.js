@@ -43,7 +43,16 @@ module.exports = {
     }
   },
 
-  response: (response, status, data, pagination) => {
+   response: (response, status, data, pagination) => {
+    const result = {}
+
+    result.status = status || 200
+    result.result = data
+
+    return response.status(result.status).json(result)
+  },
+
+  responsePage: (response, status, data, pagination) => {
     const page=[]
     const result = {}
     for (var i = 1; i <= pagination.paginate; i++) {

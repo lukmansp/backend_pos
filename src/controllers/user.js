@@ -39,7 +39,7 @@ module.exports = {
         try {
             const userId = request.params.userId
             const result = await userModel.deleteData(userId)
-            miscHelper.response(response, 200, userId)
+           miscHelper.response(response, 200, userId)
         } catch (error) {
             console.log(error)
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
@@ -60,7 +60,7 @@ module.exports = {
                 updated_at: new Date()
             }
             const result = await userModel.register(data)
-            response.json(result)
+             miscHelper.response(response, 200, data)
         } catch (error) {
             console.log(error)
         }

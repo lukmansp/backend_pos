@@ -16,7 +16,7 @@ module.exports = {
             const limit = request.query.limit || 6
             const offset = parseInt(pages);
             const startIndex = limit * (offset - 1);
-            const totalData= await productModel.countData()
+            const totalData= await productModel.countData(name,category)
 
             const result = await productModel.getAll(name, category,sortBy, orderBy, limit, startIndex)
             const paginate = Math.ceil(totalData/limit)
@@ -24,10 +24,10 @@ module.exports = {
                 paginate
             }
 
-            miscHelper.response(response, 200, result, pager)
+            miscHelper.responsePage(response, 200, result, pager)
         } catch (error) {
             console.log(error)
-            miscHelper.customErrorResponse(response, 404, 'Internal server error')
+            miscHelper.customErrorResponse(responsePage, 404, 'Internal server error')
         }
     },
 
@@ -59,6 +59,7 @@ module.exports = {
             }
             // await redisCache.del(key)
             const result = await productModel.insertData(data)
+            console.log(data)
             miscHelper.response(response, 200, data)
         } catch (error) {
             console.log(error)
