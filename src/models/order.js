@@ -25,39 +25,27 @@ module.exports = {
                 resolve(result)
             })
         })
-    },  
+    },
 
     insertOrder: (dataOrder) => {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
 
-            connection.query(sqlInsertOrder,dataOrder,(error,result)=>{
-                if(error)reject(new Error(error))
-                    resolve(result)
+            connection.query(sqlInsertOrder, dataOrder, (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
             })
         })
     },
-    insertDetail:(detailOrder)=>{
-        return new Promise((resolve,reject)=>{
-            connection.query(sqlSearchProduct,detailOrder.id_product,(error,result)=>{
-            const update = connection.query(sqlUpdateProduct,[result[0].stock - detailOrder.quantity,detailOrder.id_product])
+    insertDetail: (detailOrder) => {
+        return new Promise((resolve, reject) => {
+            connection.query(sqlSearchProduct, detailOrder.id_product, (error, result) => {
+                const update = connection.query(sqlUpdateProduct, [result[0].stock - detailOrder.quantity, detailOrder.id_product])
 
-            connection.query('INSERT INTO detail_order SET ?', detailOrder,(error,result)=>{
-                if(error)reject(new Error(error))
+                connection.query('INSERT INTO detail_order SET ?', detailOrder, (error, result) => {
+                    if (error) reject(new Error(error))
                     resolve(result)
-            })
+                })
             })
         })
     },
-    reduceStock:(detailOrder)=>{
-       return new Promise((resolve,reject)=>{
-        connection.query(sqlSearchProduct, detailOrder.id_product, (error,result)=>{
-            console.log(result)
-            // if(result.length > 0 && result[0].stock > orderDetail.quantity)
-            //    connection.query(sqlUpdateProduct, [result[0].stock - orderDetail.quantity],result[0].id, (error,result)=>{
-            //     if(error)reject(new Error(error))
-            //         resolve(result)
-            //    }) 
-        })
-       }) 
-    }
 }
