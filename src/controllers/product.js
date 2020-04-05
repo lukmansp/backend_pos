@@ -50,7 +50,7 @@ module.exports = {
                 id,
                 name: request.body.name,
                 description: request.body.description,
-                image: `http://localhost:9009/uploads/${request.file.filename}`,
+                image: `http://54.242.170.33/uploads/${request.file.filename}`,
                 price: request.body.price,
                 stock: request.body.stock,
                 category_id: request.body.category_id,
@@ -107,7 +107,7 @@ module.exports = {
             const data = {
                 name,
                 description,
-                image: `http://localhost:9009/uploads/${request.file.filename}`,
+                image: `http://54.242.170.33/uploads/${request.file.filename}`,
                 price,
                 stock,
                 category_id,

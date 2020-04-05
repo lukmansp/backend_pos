@@ -11,7 +11,7 @@ module.exports = {
 
     getAll: (name, sortBy, orderBy, limit, startIndex) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT product.id,product.name, product.stock ,order_product.user, order_product.quantity, order_product.price, order_product.total , order_product.updated_at FROM product LEFT JOIN order_product ON product.id = order_product.id_product WHERE product.name LIKE '%${name}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${startIndex}`, (error, result) => {
+            connection.query('SELECT order_product.id_order,product.name ,order_product.id_user,product.price ,detail_order.quantity ,order_product.total,order_product.created_at FROM order_product LEFT JOIN detail_order ON order_product.id_order = detail_order.id_order LEFT JOIN product ON detail_order.id_product = product.id', (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })

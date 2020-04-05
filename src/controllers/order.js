@@ -12,7 +12,7 @@ module.exports = {
             const limit = request.query.limit || '15'
             const offset = parseInt(pages);
             const startIndex = limit * (offset - 1);
-            const result = await productModel.getAll(name, sortBy, orderBy, limit, startIndex)
+            const result = await orderModel.getAll(name, sortBy, orderBy, limit, startIndex)
             miscHelper.response(response, 200, result)
         } catch (error) {
             console.log(error)
@@ -23,7 +23,7 @@ module.exports = {
     getId: async (request, response) => {
         try {
             const id_product = request.params.id_product
-            const result = await productModel.getId(id_product)
+            const result = await orderModel.getId(id_product)
             miscHelper.response(response, 200, result)
         } catch (error) {
             console.log(error)
