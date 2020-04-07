@@ -5,7 +5,8 @@ const orderController = require('../controllers/order')
 
 Route
     .get('/', orderController.getAll)
-    .get('/:id_product', orderController.getId)
+    .get('/chart', orderController.chartHistory)
+    // .get('/:id_product', orderController.getId)
     .post('/', orderController.insertOrder)
 module.exports = Route
 

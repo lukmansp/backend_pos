@@ -17,7 +17,13 @@ module.exports = {
             })
         })
     },
-
+ chartHistory:(name, category)=>{
+        return new Promise((resolve, reject)=>{
+            connection.query('SELECT count(*) as totalData FROM order_product', (error, result)=>{
+                resolve(result[0].totalData)
+            })
+        })
+    },
     getId: (id_product) => {
         return new Promise((resolve, reject) => {
             connection.query(sqlSearchProduct, id_product, (error, result) => {
@@ -26,6 +32,7 @@ module.exports = {
             })
         })
     },
+   
 
     insertOrder: (dataOrder) => {
         return new Promise((resolve, reject) => {

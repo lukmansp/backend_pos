@@ -19,6 +19,15 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
+    chartHistory:async(request,response)=>{
+        try{
+            const result = await orderModel.chartHistory()
+            miscHelper.response(response, 200 ,result)
+        }catch(error){
+            console.log(error)
+            miscHelper.customErrorResponse(response, 404, 'internal server error')
+        }
+    },
 
     getId: async (request, response) => {
         try {
