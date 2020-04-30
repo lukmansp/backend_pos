@@ -15,6 +15,15 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
+    getMenu:async(request,response)=>{
+        try{
+            const result = await userModel.getMenu()
+            miscHelper.response(response,200,result)
+        }catch(error){
+            console.log(error)
+            miscHelper.customErrorResponse(response,404,'Internal server error')
+        }
+    },
     updateData: async (request, response) => {
         try {
             const userId = request.params.userId
@@ -45,6 +54,27 @@ module.exports = {
             miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
+    updateAccess: async (request, response) => {
+        try {
+            const otoritas_id = request.params.otoritas_id
+            const {
+                otoritas,
+                name_menu,
+                access_menu
+            } = request.body;
+            const data = {
+                otoritas,
+                name_menu,
+                access_menu
+            }
+            const result = await userModel.updateAccess(data, otoritas_id)
+            miscHelper.response(response, 200, result)
+        } catch (error) {
+            console.log(error)
+            miscHelper.customErrorResponse(response, 404, 'Internal server error')
+        }
+    },
+    
     register: async (request, response) => {
         try {
             const salt = helper.generateSalt(18)
@@ -63,6 +93,7 @@ module.exports = {
              miscHelper.response(response, 200, data)
         } catch (error) {
             console.log(error)
+            miscHelper.customErrorResponse(response, 404, 'Internal server error')
         }
     },
     login: async (request, response) => {
@@ -79,7 +110,7 @@ module.exports = {
             const token = JWT.sign({
                 email: dataUser.email,
                 id: dataUser.id
-            }, JWT_KEY, { expiresIn: '9h' })
+            }, JWT_KEY, { expiresIn: '1m' })
 
             delete dataUser.salt
             delete dataUser.password

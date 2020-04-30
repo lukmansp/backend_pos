@@ -4,7 +4,7 @@ const { JWT_KEY } = require('../configs')
 module.exports = {
     authentication: (request, response, next) => {
         const headerToken = request.headers.authorization
-        const userId = request.headers['user-id']
+        const userId = request.headers['user_id']
         console.log(userId)
         if (headerToken === undefined) {
             response.json({ message: 'Please provide Token!' })
@@ -18,8 +18,8 @@ module.exports = {
         const token = request.token
         const userId = request.userId
         JWT.verify(token, JWT_KEY, (error, decoded) => {
-            if (error && error.name === 'TokenExpiredError') response.json({ message: 'Token Expired!' })
-            if (error && error.name === 'JsonWebTokenError') response.json({ message: 'Token Error!' })
+            if (error && error.name === 'TokenExpiredError') response.json({ status:404,message: 'Token Expired!' })
+            if (error && error.name === 'JsonWebTokenError') response.json({status:400, message: 'Token Error!' })
             if (parseInt(userId) !== parseInt(decoded.id)) response.json({ message: 'You\'re Unauthorized!' })
             next()
         })

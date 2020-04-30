@@ -11,17 +11,25 @@ module.exports = {
     },
     checkEmail: (email) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM user WHERE email = ?', email, (error, result) => {
+            connection.query(`SELECT user.id,user.name,user.email,user.salt,user.password,user.otoritas_id,user_access.access_menu,user.created_at FROM user LEFT JOIN user_access ON user.otoritas_id = user_access.otoritas WHERE user.email LIKE '%${email}%'`, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })
         })
     },
-    getUser: (name) => {
-        return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM user WHERE name LIKE '%${name}%'`, (error, result) => {
-                if (error) reject(new Error(error))
-                resolve(result)
+    getUser:(name)=>{
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT user.id,user.name,user.email,user.salt,user.password,user_access.name_menu,user_access.access_menu,user.created_at FROM user LEFT JOIN user_access ON user.otoritas_id = user_access.otoritas WHERE user.name LIKE '%${name}%'`, (error,result)=>{
+                if(error)reject(new Error(error))
+                    resolve(result)
+            })
+        })
+    },
+    getMenu:()=>{
+        return new Promise((resolve,reject)=>{
+            connection.query('SELECT * FROM user_access', (error,result)=>{
+                if(error)reject(new Error(error))
+                    resolve(result)
             })
         })
     },
@@ -40,6 +48,14 @@ module.exports = {
                 resolve(result)
             })
         })
-    }
+    },
+    updateAccess: (data, otoritas_id) => {
+        return new Promise((resolve, reject) => {
+            connection.query('UPDATE user_access SET ? WHERE id = ?', [data, otoritas_id], (error, result) => {
+                if (error) reject(new Error(error))
+                resolve(result)
+            })
+        })
+    },
 
 }

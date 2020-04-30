@@ -6,7 +6,7 @@ const productController = require('../controllers/product')
 const { productUpload } = require('../helpers/upload')
 
 Route
-    .get('/', productController.getAll)
+    .get('/', authentication,authorization,productController.getAll)
     .get('/:productId', productController.getId)
     .post('/', productUpload, productController.insertData)
     .patch('/:bookId', productUpload, productController.updateData)

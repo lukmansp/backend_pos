@@ -1,13 +1,15 @@
 const express = require('express')
 const Route = express.Router()
-
-const { register, login, getUser, updateData, deleteData } = require('../controllers/user')
+const { authentication, authorization } = require('../helpers/auth')
+const { register, login, getUser, updateData, deleteData,updateAccess,getMenu } = require('../controllers/user')
 
 Route
-    .get('/', getUser)
+     .get('/',authentication,authorization, getUser)
+    .get('/menu',getMenu)
     .post('/register', register)
     .post('/login', login)
-    .patch('/:userId', updateData)
+     .patch('/:userId', updateData)
+    .patch('/menu/:otoritas_id',updateAccess)
     .delete('/:userId', deleteData)
 
 
